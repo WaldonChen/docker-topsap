@@ -23,15 +23,14 @@ RUN set -eux; \
   ;; \
   *) echo >&2 "error: unsupported architecture '$arch'"; exit 1 ;; \
   esac; \
-  url="https://app.topsec.com.cn/vpn/sslvpnclient/TopSAP-${TOPSAP_VERSION}}-${ARCH}.deb"; \
-  echo "Build topsap image for architecture '${ARCH}'"; \
+  url="https://app.topsec.com.cn/vpn/sslvpnclient/TopSAP-${TOPSAP_VERSION}-${ARCH}.deb"; \
+  echo "Build TopSAP image for architecture '${ARCH}'" && \
   export DEBIAN_FRONTEND=noninteractive && \
   ln -fs /usr/share/zoneinfo/Asia /etc/localtime && \
   sed -i 's@//ports.ubuntu.com@//mirrors.ustc.edu.cn@g' /etc/apt/sources.list && \
-  packages=(tzdata sudo curl dante-server iproute2 ca-certificates iptables psmisc cron expect net-tools) && \
-  apt-get update && apt-get -y --no-install-suggests --no-install-recommends --fix-missing install $packages && \
+  apt-get update && apt-get -y --no-install-suggests --no-install-recommends --fix-missing install tzdata sudo curl dante-server iproute2 ca-certificates iptables psmisc cron expect net-tools && \
   dpkg-reconfigure --frontend noninteractive tzdata && \
-  curl -o topsap.deb $url && dpkg -i topsap.deb && rm -r topsap.deb && \
+  curl -k -o topsap.deb "$url" && dpkg -i topsap.deb && rm -r topsap.deb && \
   rm -rf /var/lib/apt/lists/*
 
 COPY start.sh expect.exp ./
