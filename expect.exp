@@ -1,3 +1,8 @@
+spawn /opt/TopSAP/topvpn logout
+expect {
+  "No user logon..." { exp_continue }
+  "Logout finished..." { exp_continue }
+}
 spawn /opt/TopSAP/topvpn login
 expect "Input your server address"
 send "{{server_address}}\n"
